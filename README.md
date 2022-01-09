@@ -1,4 +1,4 @@
-# hasura-seed-find
+# hasura-fzf
 
 This command has a fzf-like UI that allows you to find and run the file version used by the `hasura` command.
 
