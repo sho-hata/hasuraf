@@ -2,7 +2,25 @@
 
 This command has a fzf-like UI that allows you to find and run the file version used by the [hasura cli command](https://hasura.io/docs/latest/graphql/core/hasura-cli/index.html).
 
-<img src="https://media.giphy.com/media/vcTpTeXym3tOMZWsd6/giphy.gif">
+<img src="https://media0.giphy.com/media/PbWblk4u86Hx9cOcaX/giphy.gif?cid=790b7611759a58eeff1d53d37928b491d305ff0d01d5edf5&rid=giphy.gif&ct=g">
+
+## install
+
+### homebrew
+
+```
+brew install sho-hata/hasura-fzf/hasura-fzf
+```
+
+### go
+
+```
+go install github.com/sho-hata/hasura-fzf@latest
+```
+
+## binary
+
+[releases](https://github.com/sho-hata/hasura-fzf/releases)
 
 ## supported hasura cli commands
 
@@ -70,4 +88,4 @@ However, the `--file` option is not accepted.
 
 ## Author
 
-[Shoki Hata(sho-hata)](https://github.com/sho-hata)Released under the MIT License.
+[Shoki Hata(sho-hata)](https://github.com/sho-hata) Released under the MIT License.
