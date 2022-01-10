@@ -6,6 +6,8 @@ import (
 	"io/fs"
 	"io/ioutil"
 	"os/exec"
+	"strconv"
+	"strings"
 
 	"github.com/ktr0731/go-fuzzyfinder"
 )
@@ -14,11 +16,11 @@ type HasuraCmd struct {
 	called    string
 	command   []string
 	fileNames []string
-	options   map[string]string
+	options   map[string]interface{}
 	target    string
 }
 
-func NewHasuraCmd(called string, options map[string]string) *HasuraCmd {
+func NewHasuraCmd(called string, options map[string]interface{}) *HasuraCmd {
 	return &HasuraCmd{called: called, options: options}
 }
 
@@ -33,7 +35,7 @@ func (h *HasuraCmd) Run() (string, error) {
 }
 
 func (h *HasuraCmd) exec() (string, error) {
-	fmt.Println(h.command)
+	fmt.Println("running... ", "hasura", strings.Join(h.command, " "))
 	r, err := exec.Command("hasura", h.command...).CombinedOutput()
 	return string(r), err
 }
@@ -42,10 +44,15 @@ func (h *HasuraCmd) setCommand() *HasuraCmd {
 	if h.called == "seed" {
 		h.command = []string{"seed", "apply", "--file", h.target}
 	}
-	// set flags
+	// set optional flags
 	for k, v := range h.options {
 		h.command = append(h.command, fmt.Sprintf("--%s", k))
-		h.command = append(h.command, v)
+		switch v := v.(type) {
+		case string:
+			h.command = append(h.command, v)
+		case bool:
+			h.command = append(h.command, strconv.FormatBool(v))
+		}
 	}
 	return h
 }
@@ -55,12 +62,12 @@ func (h *HasuraCmd) setTarget() error {
 	if err != nil {
 		return err
 	}
-	h.target = fmt.Sprintf("seed/%s/%s", h.options["database-name"], target)
+	h.target = target
 	return nil
 }
 
 func (h *HasuraCmd) setFileNames() error {
-	const seedFilePath string = "./seeds/default"
+	seedFilePath := fmt.Sprintf("./seeds/%s", h.options["database-name"])
 	files, err := readFiles(seedFilePath)
 	if err != nil {
 		return err
