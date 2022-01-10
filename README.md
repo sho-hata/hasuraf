@@ -2,6 +2,8 @@
 
 This command has a fzf-like UI that allows you to find and run the file version used by the `hasura` command.
 
+<img src="https://media2.giphy.com/media/cJHTLxeNumxx4KKDeh/giphy.gif">
+
 ## supported hasura commands
 
 - (Developing)[hasura seed apply --file](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_seed_apply.html)
