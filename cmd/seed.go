@@ -32,6 +32,9 @@ to quickly create a Cobra application.`,
 		if adminSecretFlag, _ := cmd.Flags().GetString("admin-secret"); adminSecretFlag != "" {
 			flagOptions["admin-secret"] = adminSecretFlag
 		}
+		if endpointFlag, _ := cmd.Flags().GetString("endpoint"); endpointFlag != "" {
+			flagOptions["endpoint"] = endpointFlag
+		}
 
 		if result, err := hasura.NewHasuraCmd(use, flagOptions).Run(); err != nil {
 			log.Fatal(result, err)
@@ -45,4 +48,5 @@ func init() {
 	rootCmd.AddCommand(seedCmd)
 	seedCmd.Flags().String("database-name", "", "database on which operation should be applied")
 	seedCmd.Flags().String("admin-secret", "", "admin secret for Hasura GraphQL engine")
+	seedCmd.Flags().String("endpoint", "", "endpoint for Hasura GraphQL engine")
 }

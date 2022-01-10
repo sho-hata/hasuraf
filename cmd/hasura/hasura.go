@@ -12,10 +12,10 @@ import (
 
 type HasuraCmd struct {
 	called    string
+	command   []string
 	fileNames []string
 	options   map[string]string
 	target    string
-	command   []string
 }
 
 func NewHasuraCmd(called string, options map[string]string) *HasuraCmd {
@@ -33,6 +33,7 @@ func (h *HasuraCmd) Run() (string, error) {
 }
 
 func (h *HasuraCmd) exec() (string, error) {
+	fmt.Println(h.command)
 	r, err := exec.Command("hasura", h.command...).CombinedOutput()
 	return string(r), err
 }
@@ -50,16 +51,15 @@ func (h *HasuraCmd) setCommand() *HasuraCmd {
 }
 
 func (h *HasuraCmd) setTarget() error {
-	t, err := h.findOne()
+	target, err := h.findOne()
 	if err != nil {
 		return err
 	}
-	h.target = t
+	h.target = fmt.Sprintf("seed/%s/%s", h.options["database-name"], target)
 	return nil
 }
 
 func (h *HasuraCmd) setFileNames() error {
-	// const seedFilePath string = "./seeds/default/"
 	const seedFilePath string = "./seeds/default"
 	files, err := readFiles(seedFilePath)
 	if err != nil {
