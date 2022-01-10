@@ -5,11 +5,19 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os/exec"
+	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/ktr0731/go-fuzzyfinder"
 )
+
+const (
+	calledSeedApply    string = "seed"
+	calledMigrateApply string = "migrate apply"
+)
+
+var regex *regexp.Regexp
 
 type HasuraCmd struct {
 	called    string
@@ -20,6 +28,9 @@ type HasuraCmd struct {
 }
 
 func NewHasuraCmd(called string, options map[string]interface{}) *HasuraCmd {
+	if called == calledMigrateApply {
+		setRegex()
+	}
 	return &HasuraCmd{called: called, options: options}
 }
 
@@ -46,9 +57,12 @@ func (h *HasuraCmd) setCommand() *HasuraCmd {
 		return h
 	}
 
-	if h.called == "seed" {
+	switch h.called {
+	case calledSeedApply:
 		h.command = []string{"seed", "apply", "--file", h.target}
-	} else {
+	case calledMigrateApply:
+		h.command = []string{"migrate", "apply", "--version", h.target}
+	default:
 		return h
 	}
 	// set optional flags
@@ -65,17 +79,28 @@ func (h *HasuraCmd) setCommand() *HasuraCmd {
 }
 
 func (h *HasuraCmd) setTarget() error {
-	target, err := h.findOne()
+	fileName, err := h.findOne()
 	if err != nil {
 		return err
 	}
-	h.target = target
+	if h.called == calledMigrateApply {
+		h.target = trimVersion(fileName)
+	} else {
+		h.target = fileName
+	}
 	return nil
 }
 
 func (h *HasuraCmd) setFileNames() error {
-	seedFilePath := fmt.Sprintf("./seeds/%s", h.options["database-name"])
-	files, err := ioutil.ReadDir(seedFilePath)
+	var filePath string
+	switch h.called {
+	case calledSeedApply:
+		filePath = fmt.Sprintf("./seeds/%s", h.options["database-name"])
+	case calledMigrateApply:
+		filePath = fmt.Sprintf("./migrations/%s", h.options["database-name"])
+	}
+	files, err := ioutil.ReadDir(filePath)
+
 	if err != nil {
 		return err
 	}
@@ -84,7 +109,10 @@ func (h *HasuraCmd) setFileNames() error {
 	}
 
 	for _, file := range files {
-		if !file.IsDir() {
+		if file.IsDir() && h.called == calledMigrateApply {
+			h.fileNames = append(h.fileNames, file.Name())
+		}
+		if !file.IsDir() && h.called == calledSeedApply {
 			h.fileNames = append(h.fileNames, file.Name())
 		}
 	}
@@ -104,4 +132,12 @@ func (h *HasuraCmd) findOne() (string, error) {
 		return "", err
 	}
 	return fileNames[i].name, nil
+}
+
+func trimVersion(fileName string) string {
+	return string(regex.Find([]byte(fileName)))
+}
+
+func setRegex() {
+	regex = regexp.MustCompile(`^[0-9]+`)
 }

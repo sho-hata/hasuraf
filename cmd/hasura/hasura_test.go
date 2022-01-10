@@ -108,6 +108,85 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 				target: "xxx.sql",
 			},
 		},
+		{
+			name: "case: h.called == 'migrate apply'",
+			fields: fields{
+				called: "migrate apply",
+				target: "xxx",
+			},
+			want: &HasuraCmd{
+				called:  "migrate apply",
+				target:  "xxx",
+				command: []string{"migrate", "apply", "--version", "xxx"},
+			},
+		},
+		{
+			name: "case: h.called == 'migrate apply', set string options",
+			fields: fields{
+				called: "migrate apply",
+				target: "xxx",
+				options: map[string]interface{}{
+					"admin-secret": "secret",
+				},
+			},
+			want: &HasuraCmd{
+				called:  "migrate apply",
+				target:  "xxx",
+				command: []string{"migrate", "apply", "--version", "xxx", "--admin-secret", "secret"},
+				options: map[string]interface{}{
+					"admin-secret": "secret",
+				},
+			},
+		},
+		{
+			name: "case: h.called == 'migrate apply', set bool options",
+			fields: fields{
+				called: "migrate apply",
+				target: "xxx",
+				options: map[string]interface{}{
+					"no-color": false,
+				},
+			},
+			want: &HasuraCmd{
+				called:  "migrate apply",
+				target:  "xxx",
+				command: []string{"migrate", "apply", "--version", "xxx", "--no-color", "false"},
+				options: map[string]interface{}{
+					"no-color": false,
+				},
+			},
+		},
+		{
+			name: "case: h.called == 'migrate', set bool and string options",
+			fields: fields{
+				called: "migrate apply",
+				target: "xxx",
+				options: map[string]interface{}{
+					"no-color":     false,
+					"admin-secret": "secret",
+				},
+			},
+			want: &HasuraCmd{
+				called:  "migrate apply",
+				target:  "xxx",
+				command: []string{"migrate", "apply", "--version", "xxx", "--admin-secret", "secret", "--no-color", "false"},
+				options: map[string]interface{}{
+					"no-color":     false,
+					"admin-secret": "secret",
+				},
+			},
+		},
+		{
+			name: "case: h.called != 'seed' & h.called != 'migrate apply'",
+			fields: fields{
+				called: "hoge",
+				target: "xxx",
+			},
+			want: &HasuraCmd{
+				called: "hoge",
+				target: "xxx",
+			},
+		},
 	}
 	for _, tt := range tests {
 		tt := tt
