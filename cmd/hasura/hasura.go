@@ -85,7 +85,7 @@ func (h *HasuraCmd) findOne() (string, error) {
 	type fileName struct {
 		name string
 	}
-	var fileNames []fileName
+	var fileNames []fileName //nolint:prealloc // Since filenames include directory names, they are less in length than in capacity.
 	for _, f := range h.fileNames {
 		fileNames = append(fileNames, fileName{f})
 	}
