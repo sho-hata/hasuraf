@@ -3,7 +3,6 @@ package hasura
 import (
 	"errors"
 	"fmt"
-	"io/fs"
 	"io/ioutil"
 	"os/exec"
 	"strconv"
@@ -68,9 +67,12 @@ func (h *HasuraCmd) setTarget() error {
 
 func (h *HasuraCmd) setFileNames() error {
 	seedFilePath := fmt.Sprintf("./seeds/%s", h.options["database-name"])
-	files, err := readFiles(seedFilePath)
+	files, err := ioutil.ReadDir(seedFilePath)
 	if err != nil {
 		return err
+	}
+	if len(files) == 0 {
+		return errors.New("no file")
 	}
 
 	for _, file := range files {
@@ -94,15 +96,4 @@ func (h *HasuraCmd) findOne() (string, error) {
 		return "", err
 	}
 	return fileNames[i].name, nil
-}
-
-func readFiles(path string) ([]fs.FileInfo, error) {
-	files, err := ioutil.ReadDir(path)
-	if err != nil {
-		return nil, err
-	}
-	if len(files) == 0 {
-		return nil, errors.New("no file")
-	}
-	return files, nil
 }
