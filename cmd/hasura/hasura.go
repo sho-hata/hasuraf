@@ -42,8 +42,14 @@ func (h *HasuraCmd) exec() (string, error) {
 }
 
 func (h *HasuraCmd) setCommand() *HasuraCmd {
+	if h.target == "" {
+		return h
+	}
+
 	if h.called == "seed" {
 		h.command = []string{"seed", "apply", "--file", h.target}
+	} else {
+		return h
 	}
 	// set optional flags
 	for k, v := range h.options {
