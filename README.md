@@ -25,7 +25,7 @@ go install github.com/sho-hata/hasura-fzf@latest
 ## supported hasura cli commands
 
 - [hasura seed apply --file](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_seed_apply.html)
-- (Developing)[hasura migrate apply --version](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_migrate_apply.html)
+- [hasura migrate apply --version](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_migrate_apply.html)
 - (Developing)[hasura migrate delete --version](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_migrate_delete.html)
 
 ## Usage
@@ -47,6 +47,7 @@ Available Commands:
   completion  Generate the autocompletion script for the specified shell
   help        Help about any command
   seed        Find the seed file to apply and run the "hasura seed apply" command.
+  migrate     Manage migrations on the database.
 
 Flags:
   -h, --help   help for hasuraf
@@ -78,7 +79,27 @@ Compliant with [originnal](https://hasura.io/docs/latest/graphql/core/hasura-cli
 
 However, the `--file` option is not accepted.
 
-### migrate apply(Developing)
+### migrate apply
+
+Find the migrate version to apply and run the \"hasura migrate apply\" command.
+
+It will convert as follows
+
+```
+hasuraf migrate apply
+```
+
+↓
+
+```
+hasura migrate apply --version XXX
+```
+
+#### options
+
+Compliant with [originnal](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_migrate_apply.html#hasura-migrate-apply).
+
+However, the `--version` option is not accepted.
 
 ### migrate delete(Developing)
 
