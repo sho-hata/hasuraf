@@ -35,6 +35,8 @@ func (h *HasuraCmd) Run() (string, error) {
 
 func (h *HasuraCmd) exec() (string, error) {
 	fmt.Println("running... ", "hasura", strings.Join(h.command, " "))
+	fmt.Println("")
+
 	r, err := exec.Command("hasura", h.command...).CombinedOutput()
 	return string(r), err
 }
