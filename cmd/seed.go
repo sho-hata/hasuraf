@@ -87,8 +87,8 @@ func setFlags(cmd *cobra.Command) map[string]interface{} {
 	if projectFlag, _ := cmd.Flags().GetString("project"); projectFlag != "" {
 		flagOptions["project"] = projectFlag
 	}
-	if skipUpdateCheck, _ := cmd.Flags().GetString("skip-update-check "); skipUpdateCheck != "" {
-		flagOptions["skip-update-check "] = skipUpdateCheck
+	if skipUpdateCheck, _ := cmd.Flags().GetString("skip-update-check"); skipUpdateCheck != "" {
+		flagOptions["skip-update-check"] = skipUpdateCheck
 	}
 	return flagOptions
 }
