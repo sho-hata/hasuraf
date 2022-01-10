@@ -9,7 +9,7 @@ jobs:
       - name: set up
         uses: actions/setup-go@v2
         with:
-          go-version: ^1.13
+          go-version: ^1.17
         id: go
       - name: check out
         uses: actions/checkout@v2
@@ -22,7 +22,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-  # buildテスト
   build:
     needs: setup
     runs-on: ubuntu-latest
