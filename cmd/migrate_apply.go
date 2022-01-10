@@ -8,25 +8,25 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var seedCmd = &cobra.Command{
-	Use:   "seed",
-	Short: "Find the seed file to apply and run the \"hasura seed apply\" command.",
+var migrateApplyCmd = &cobra.Command{
+	Use:   "apply",
+	Short: "Find the version to apply and run the \"hasura migrate apply\" command.",
 	Long: `
-Find the seed file to apply and run the \"hasura seed apply'" command.
+Find the version to apply and run the \"hasura migrate apply\" command.
 # It will convert as follows
-hasuraf seed -> hasura seed apply --file XXX
+hasuraf migrate apply -> hasura migrate apply --version XXX
 
 # caution
 When you use it, put the .env file with "HASURA_GRAPHQL_DATABASE_URL" in the "/hasura" directory.
 If the file is located elsewhere, use the \"--envfile\" option to specify the location of the .env file.`,
 	Example: `
-# Apply only a particular file:
-hasuraf seed
+# Apply a particular migration version only:
+hasuraf migrate apply
 
 # Use with admin secret:
-hasuraf seed --admin-secret "<admin-secret>"`,
+hasuraf migrate apply --admin-secret "<admin-secret>"`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if result, err := hasura.NewHasuraCmd("seed", setFlagValues(cmd)).Run(); err != nil {
+		if result, err := hasura.NewHasuraCmd("migrate apply", setFlagValues(cmd)).Run(); err != nil {
 			fmt.Println(result, err)
 			os.Exit(1)
 		} else {
@@ -37,6 +37,6 @@ hasuraf seed --admin-secret "<admin-secret>"`,
 }
 
 func init() {
-	rootCmd.AddCommand(seedCmd)
-	setFlags(seedCmd)
+	migrateCmd.AddCommand(migrateApplyCmd)
+	setFlags(migrateApplyCmd)
 }
