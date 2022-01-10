@@ -12,11 +12,28 @@ This command has a fzf-like UI that allows you to find and run the file version 
 
 ## Usage
 
-1. Download binary.
-2. Run the confirmation command after the download is successful.
-
 ```
-hasuraf
+___  ___  ________  ________  ___  ___  ________  ________  ________
+|\  \|\  \|\   __  \|\   ____\|\  \|\  \|\   __  \|\   __  \|\  _____\
+\ \  \\\  \ \  \|\  \ \  \___|\ \  \\\  \ \  \|\  \ \  \|\  \ \  \__/
+ \ \   __  \ \   __  \ \_____  \ \  \\\  \ \   _  _\ \   __  \ \   __\
+  \ \  \ \  \ \  \ \  \|____|\  \ \  \\\  \ \  \\  \\ \  \ \  \ \  \_|
+   \ \__\ \__\ \__\ \__\____\_\  \ \_______\ \__\\ _\\ \__\ \__\ \__\
+    \|__|\|__|\|__|\|__|\_________\|_______|\|__|\|__|\|__|\|__|\|__|
+                       \|_________|
+
+Usage:
+  hasuraf [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  help        Help about any command
+  seed        Find the seed file to apply and run the "hasura seed apply" command.
+
+Flags:
+  -h, --help   help for hasuraf
+
+Use "hasuraf [command] --help" for more information about a command.
 ```
 
 ### features
