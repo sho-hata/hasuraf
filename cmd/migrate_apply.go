@@ -17,7 +17,7 @@ Find the version to apply and run the \"hasura migrate apply\" command.
 hasuraf migrate apply -> hasura migrate apply --version XXX
 
 # caution
-When you use it, put the .env file with "HASURA_GRAPHQL_DATABASE_URL" in the "/hasura" directory.
+When you use it, put the .env file with "HASURA_GRAPHQL_DATABASE_URL" in the current directory.
 If the file is located elsewhere, use the \"--envfile\" option to specify the location of the .env file.`,
 	Example: `
 # Apply a particular migration version only:

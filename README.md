@@ -55,6 +55,12 @@ Flags:
 Use "hasuraf [command] --help" for more information about a command.
 ```
 
+### cautions when using
+
+- As with the `hasura cli`, run it in the directory where the `config.yml` exists.
+- When you use it, put the .env file with "HASURA_GRAPHQL_DATABASE_URL" in the current directory.
+  - If the file is located elsewhere, use the \"--envfile\" option to specify the location of the .env file.
+
 ### features
 
 ### seed apply
