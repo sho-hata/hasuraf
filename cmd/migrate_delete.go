@@ -31,5 +31,5 @@ var migrateDeleteCmd = &cobra.Command{
 
 func init() {
 	migrateCmd.AddCommand(migrateDeleteCmd)
-	setFlags(migrateApplyCmd)
+	setFlags(migrateDeleteCmd)
 }
