@@ -26,7 +26,7 @@ go install github.com/sho-hata/hasura-fzf@latest
 
 - [hasura seed apply --file](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_seed_apply.html)
 - [hasura migrate apply --version](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_migrate_apply.html)
-- (Developing)[hasura migrate delete --version](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_migrate_delete.html)
+- [hasura migrate delete --version](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_migrate_delete.html)
 
 ## Usage
 
@@ -48,6 +48,7 @@ Available Commands:
   help        Help about any command
   seed        Find the seed file to apply and run the "hasura seed apply" command.
   migrate     Manage migrations on the database.
+  delete      clear migrations from local project and server.
 
 Flags:
   -h, --help   help for hasuraf
@@ -55,15 +56,15 @@ Flags:
 Use "hasuraf [command] --help" for more information about a command.
 ```
 
-### cautions when using
+## cautions when using
 
 - As with the `hasura cli`, run it in the directory where the `config.yml` exists.
 - When you use it, put the .env file with "HASURA_GRAPHQL_DATABASE_URL" in the current directory.
   - If the file is located elsewhere, use the \"--envfile\" option to specify the location of the .env file.
 
-### features
+## features
 
-### seed apply
+## seed apply
 
 Find the seed file to apply and run the \"hasura seed apply\" command.
 
@@ -79,13 +80,13 @@ hasuraf seed
 hasura seed apply --file XXX
 ```
 
-#### options
+### options
 
 Compliant with [originnal](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_seed_apply.html#hasura-seed-apply).
 
 However, the `--file` option is not accepted.
 
-### migrate apply
+## migrate apply
 
 Find the migrate version to apply and run the \"hasura migrate apply\" command.
 
@@ -101,13 +102,33 @@ hasuraf migrate apply
 hasura migrate apply --version XXX
 ```
 
-#### options
+### options
 
 Compliant with [originnal](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_migrate_apply.html#hasura-migrate-apply).
 
 However, the `--version` option is not accepted.
 
-### migrate delete(Developing)
+## migrate delete
+
+Find the migrate version to delete and run the \"hasura migrate delete\" command.
+
+It will convert as follows
+
+```
+hasuraf migrate delete
+```
+
+↓
+
+```
+hasura migrate delete --version XXX
+```
+
+### options
+
+Compliant with [originnal](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_migrate_delete.html#hasura-migrate-delete).
+
+However, the `--version` option is not accepted.
 
 ## supported hasura config version
 

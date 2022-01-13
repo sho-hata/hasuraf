@@ -13,8 +13,9 @@ import (
 )
 
 const (
-	calledSeedApply    string = "seed"
-	calledMigrateApply string = "migrate apply"
+	calledSeedApply     string = "seed"
+	calledMigrateApply  string = "migrate apply"
+	calledMigrateDelete string = "migrate delete"
 )
 
 var regex *regexp.Regexp
@@ -28,7 +29,7 @@ type HasuraCmd struct {
 }
 
 func NewHasuraCmd(called string, options map[string]interface{}) *HasuraCmd {
-	if called == calledMigrateApply {
+	if called == calledMigrateApply || called == calledMigrateDelete {
 		setRegex()
 	}
 	return &HasuraCmd{called: called, options: options}
@@ -62,6 +63,8 @@ func (h *HasuraCmd) setCommand() *HasuraCmd {
 		h.command = []string{"seed", "apply", "--file", h.target}
 	case calledMigrateApply:
 		h.command = []string{"migrate", "apply", "--version", h.target}
+	case calledMigrateDelete:
+		h.command = []string{"migrate", "delete", "--version", h.target}
 	default:
 		return h
 	}
@@ -83,7 +86,7 @@ func (h *HasuraCmd) setTarget() error {
 	if err != nil {
 		return err
 	}
-	if h.called == calledMigrateApply {
+	if h.called == calledMigrateApply || h.called == calledMigrateDelete {
 		h.target = trimVersion(fileName)
 	} else {
 		h.target = fileName
@@ -96,7 +99,7 @@ func (h *HasuraCmd) setFileNames() error {
 	switch h.called {
 	case calledSeedApply:
 		filePath = fmt.Sprintf("./seeds/%s", h.options["database-name"])
-	case calledMigrateApply:
+	case calledMigrateApply, calledMigrateDelete:
 		filePath = fmt.Sprintf("./migrations/%s", h.options["database-name"])
 	}
 	files, err := ioutil.ReadDir(filePath)
@@ -109,8 +112,10 @@ func (h *HasuraCmd) setFileNames() error {
 	}
 
 	for _, file := range files {
-		if file.IsDir() && h.called == calledMigrateApply {
-			h.fileNames = append(h.fileNames, file.Name())
+		if file.IsDir() {
+			if h.called == calledMigrateApply || h.called == calledMigrateDelete {
+				h.fileNames = append(h.fileNames, file.Name())
+			}
 		}
 		if !file.IsDir() && h.called == calledSeedApply {
 			h.fileNames = append(h.fileNames, file.Name())

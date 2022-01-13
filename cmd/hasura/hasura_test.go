@@ -177,7 +177,75 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 			},
 		},
 		{
-			name: "case: h.called != 'seed' & h.called != 'migrate apply'",
+			name: "case: h.called == 'migrate delete'",
+			fields: fields{
+				called: "migrate delete",
+				target: "xxx",
+			},
+			want: &HasuraCmd{
+				called:  "migrate delete",
+				target:  "xxx",
+				command: []string{"migrate", "delete", "--version", "xxx"},
+			},
+		},
+		{
+			name: "case: h.called == 'migrate delete', set string options",
+			fields: fields{
+				called: "migrate delete",
+				target: "xxx",
+				options: map[string]interface{}{
+					"admin-secret": "secret",
+				},
+			},
+			want: &HasuraCmd{
+				called:  "migrate delete",
+				target:  "xxx",
+				command: []string{"migrate", "delete", "--version", "xxx", "--admin-secret", "secret"},
+				options: map[string]interface{}{
+					"admin-secret": "secret",
+				},
+			},
+		},
+		{
+			name: "case: h.called == 'migrate delete', set bool options",
+			fields: fields{
+				called: "migrate delete",
+				target: "xxx",
+				options: map[string]interface{}{
+					"no-color": false,
+				},
+			},
+			want: &HasuraCmd{
+				called:  "migrate delete",
+				target:  "xxx",
+				command: []string{"migrate", "delete", "--version", "xxx", "--no-color", "false"},
+				options: map[string]interface{}{
+					"no-color": false,
+				},
+			},
+		},
+		{
+			name: "case: h.called == 'migrate', set bool and string options",
+			fields: fields{
+				called: "migrate delete",
+				target: "xxx",
+				options: map[string]interface{}{
+					"no-color":     false,
+					"admin-secret": "secret",
+				},
+			},
+			want: &HasuraCmd{
+				called:  "migrate delete",
+				target:  "xxx",
+				command: []string{"migrate", "delete", "--version", "xxx", "--admin-secret", "secret", "--no-color", "false"},
+				options: map[string]interface{}{
+					"no-color":     false,
+					"admin-secret": "secret",
+				},
+			},
+		},
+		{
+			name: "case: h.called != 'seed' & h.called != 'migrate apply & h.called != 'migrate delete'",
 			fields: fields{
 				called: "hoge",
 				target: "xxx",
