@@ -2,7 +2,7 @@
 
 This command has a fzf-like UI that allows you to find and run the file version used by the [hasura cli command](https://hasura.io/docs/latest/graphql/core/hasura-cli/index.html).
 
-<img src="https://media0.giphy.com/media/PbWblk4u86Hx9cOcaX/giphy.gif?cid=790b7611759a58eeff1d53d37928b491d305ff0d01d5edf5&rid=giphy.gif&ct=g">
+<img src="https://media1.giphy.com/media/aZur3hP0ke0p7vJrH8/giphy.gif?cid=790b761159378e0f6a9e19ab11981ecac39458e1a3f2db2f&rid=giphy.gif&ct=g">
 
 ## install
 
@@ -46,7 +46,7 @@ Usage:
 Available Commands:
   completion  Generate the autocompletion script for the specified shell
   help        Help about any command
-  seed        Find the seed file to apply and run the "hasura seed apply" command.
+  seed        Manage seed data.
   migrate     Manage migrations on the database.
   delete      clear migrations from local project and server.
 
@@ -71,7 +71,7 @@ Find the seed file to apply and run the \"hasura seed apply\" command.
 It will convert as follows
 
 ```
-hasuraf seed
+hasuraf seed apply
 ```
 
 ↓
