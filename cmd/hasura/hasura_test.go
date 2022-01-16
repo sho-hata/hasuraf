@@ -23,35 +23,35 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 		{
 			name: "case: not set h.target",
 			fields: fields{
-				called: "seed",
+				called: "seed apply",
 			},
 			want: &HasuraCmd{
-				called: "seed",
+				called: "seed apply",
 			},
 		},
 		{
-			name: "case: h.called == 'seed'",
+			name: "case: h.called == 'seed apply'",
 			fields: fields{
-				called: "seed",
+				called: "seed apply",
 				target: "xxx.sql",
 			},
 			want: &HasuraCmd{
-				called:  "seed",
+				called:  "seed apply",
 				target:  "xxx.sql",
 				command: []string{"seed", "apply", "--file", "xxx.sql"},
 			},
 		},
 		{
-			name: "case: h.called == 'seed', set string options",
+			name: "case: h.called == 'seed apply', set string options",
 			fields: fields{
-				called: "seed",
+				called: "seed apply",
 				target: "xxx.sql",
 				options: map[string]interface{}{
 					"admin-secret": "secret",
 				},
 			},
 			want: &HasuraCmd{
-				called:  "seed",
+				called:  "seed apply",
 				target:  "xxx.sql",
 				command: []string{"seed", "apply", "--file", "xxx.sql", "--admin-secret", "secret"},
 				options: map[string]interface{}{
@@ -60,16 +60,16 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 			},
 		},
 		{
-			name: "case: h.called == 'seed', set bool options",
+			name: "case: h.called == 'seed apply', set bool options",
 			fields: fields{
-				called: "seed",
+				called: "seed apply",
 				target: "xxx.sql",
 				options: map[string]interface{}{
 					"no-color": false,
 				},
 			},
 			want: &HasuraCmd{
-				called:  "seed",
+				called:  "seed apply",
 				target:  "xxx.sql",
 				command: []string{"seed", "apply", "--file", "xxx.sql", "--no-color", "false"},
 				options: map[string]interface{}{
@@ -78,9 +78,9 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 			},
 		},
 		{
-			name: "case: h.called == 'seed', set bool and string options",
+			name: "case: h.called == 'seed apply', set bool and string options",
 			fields: fields{
-				called: "seed",
+				called: "seed apply",
 				target: "xxx.sql",
 				options: map[string]interface{}{
 					"no-color":     false,
@@ -88,7 +88,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 				},
 			},
 			want: &HasuraCmd{
-				called:  "seed",
+				called:  "seed apply",
 				target:  "xxx.sql",
 				command: []string{"seed", "apply", "--file", "xxx.sql", "--admin-secret", "secret", "--no-color", "false"},
 				options: map[string]interface{}{
@@ -98,7 +98,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 			},
 		},
 		{
-			name: "case: h.called != 'seed'",
+			name: "case: h.called != 'seed apply'",
 			fields: fields{
 				called: "migrate",
 				target: "xxx.sql",
@@ -245,7 +245,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 			},
 		},
 		{
-			name: "case: h.called != 'seed' & h.called != 'migrate apply & h.called != 'migrate delete'",
+			name: "case: h.called != 'seed apply' & h.called != 'migrate apply & h.called != 'migrate delete'",
 			fields: fields{
 				called: "hoge",
 				target: "xxx",

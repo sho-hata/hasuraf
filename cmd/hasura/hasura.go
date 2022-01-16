@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	calledSeedApply     string = "seed"
+	CalledSeedApply     string = "seed apply"
 	calledMigrateApply  string = "migrate apply"
 	calledMigrateDelete string = "migrate delete"
 )
@@ -59,7 +59,7 @@ func (h *HasuraCmd) setCommand() *HasuraCmd {
 	}
 
 	switch h.called {
-	case calledSeedApply:
+	case CalledSeedApply:
 		h.command = []string{"seed", "apply", "--file", h.target}
 	case calledMigrateApply:
 		h.command = []string{"migrate", "apply", "--version", h.target}
@@ -97,7 +97,7 @@ func (h *HasuraCmd) setTarget() error {
 func (h *HasuraCmd) setFileNames() error {
 	var filePath string
 	switch h.called {
-	case calledSeedApply:
+	case CalledSeedApply:
 		filePath = fmt.Sprintf("./seeds/%s", h.options["database-name"])
 	case calledMigrateApply, calledMigrateDelete:
 		filePath = fmt.Sprintf("./migrations/%s", h.options["database-name"])
@@ -117,7 +117,7 @@ func (h *HasuraCmd) setFileNames() error {
 				h.fileNames = append(h.fileNames, file.Name())
 			}
 		}
-		if !file.IsDir() && h.called == calledSeedApply {
+		if !file.IsDir() && h.called == CalledSeedApply {
 			h.fileNames = append(h.fileNames, file.Name())
 		}
 	}
