@@ -26,7 +26,8 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 				called: "seed apply",
 			},
 			want: &HasuraCmd{
-				called: "seed apply",
+				called:  "seed apply",
+				command: []string{"seed", "apply"},
 			},
 		},
 		{

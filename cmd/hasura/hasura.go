@@ -54,20 +54,16 @@ func (h *HasuraCmd) exec() (string, error) {
 }
 
 func (h *HasuraCmd) setCommand() *HasuraCmd {
-	if h.target == "" {
-		return h
-	}
-
 	switch h.called {
 	case CalledSeedApply:
-		h.command = []string{"seed", "apply", "--file", h.target}
-	case calledMigrateApply:
-		h.command = []string{"migrate", "apply", "--version", h.target}
-	case calledMigrateDelete:
-		h.command = []string{"migrate", "delete", "--version", h.target}
-	default:
-		return h
+		h.command = append(strings.Split(h.called, " "), []string{"--file", h.target}...)
+	case calledMigrateApply, calledMigrateDelete:
+		h.command = append(strings.Split(h.called, " "), []string{"--version", h.target}...)
 	}
+	if h.target == "" {
+		h.command = strings.Split(h.called, " ")
+	}
+
 	// set optional flags
 	for k, v := range h.options {
 		h.command = append(h.command, fmt.Sprintf("--%s", k))
@@ -82,6 +78,9 @@ func (h *HasuraCmd) setCommand() *HasuraCmd {
 }
 
 func (h *HasuraCmd) setTarget() error {
+	if len(h.fileNames) == 0 {
+		return nil
+	}
 	fileName, err := h.findOne()
 	if err != nil {
 		return err
@@ -101,9 +100,11 @@ func (h *HasuraCmd) setFileNames() error {
 		filePath = fmt.Sprintf("./seeds/%s", h.options["database-name"])
 	case calledMigrateApply, calledMigrateDelete:
 		filePath = fmt.Sprintf("./migrations/%s", h.options["database-name"])
+	default:
+		return nil
 	}
-	files, err := ioutil.ReadDir(filePath)
 
+	files, err := ioutil.ReadDir(filePath)
 	if err != nil {
 		return err
 	}
