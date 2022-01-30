@@ -16,7 +16,7 @@ func setFlags(cmd *cobra.Command) {
 	case useMigrate, useSeed:
 		setMigrateFlags(cmd)
 		fallthrough
-	case useMetadata:
+	case useMetadata, useInconsistency:
 		setOptionalFlags(cmd)
 	}
 	setGlobalFlags(cmd)
@@ -54,7 +54,7 @@ func setFlagValues(cmd *cobra.Command) map[string]interface{} {
 	case useMigrate, useSeed:
 		setMigrateFlagValues(cmd, flagOptions)
 		fallthrough
-	case useMetadata:
+	case useMetadata, useInconsistency:
 		setOptionalFlagValues(cmd, flagOptions)
 	}
 
