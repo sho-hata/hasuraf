@@ -8,8 +8,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const useInconsistency = "inconsistency"
+
 var metadataInconsistencyCmd = &cobra.Command{
-	Use:     "inconsistency",
+	Use:     useInconsistency,
 	Short:   "Manage inconsistent objects in Hasura metadata.",
 	Aliases: []string{"inconsistencies", "ic"},
 	Run: func(cmd *cobra.Command, args []string) {
@@ -25,4 +27,5 @@ var metadataInconsistencyCmd = &cobra.Command{
 
 func init() {
 	setFlags(metadataInconsistencyCmd)
+	metadataInconsistencyCmd.AddCommand(metadataInconsistencyDropCmd)
 }
