@@ -1,16 +1,24 @@
 package cmd
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+)
 
 func setFlags(cmd *cobra.Command) {
-	switch cmd.Use {
-	case "migrate", "apply", "delete":
-		setMigrateFlags(cmd)
-		fallthrough
-	case "metadata":
-		setOptionalFlags(cmd)
+	var category string
+	if cmd.Parent().Use == rootCmd.Use {
+		category = cmd.Use
+	} else {
+		category = cmd.Parent().Use
 	}
 
+	switch category {
+	case useMigrate:
+		setMigrateFlags(cmd)
+		fallthrough
+	case useMetadata:
+		setOptionalFlags(cmd)
+	}
 	setGlobalFlags(cmd)
 }
 
@@ -36,12 +44,17 @@ func setMigrateFlags(cmd *cobra.Command) {
 
 func setFlagValues(cmd *cobra.Command) map[string]interface{} {
 	flagOptions := map[string]interface{}{}
-
-	switch cmd.Use {
-	case "migrate", "apply", "delete":
+	var category string
+	if cmd.Parent().Use == rootCmd.Use {
+		category = cmd.Use
+	} else {
+		category = cmd.Parent().Use
+	}
+	switch category {
+	case useMigrate:
 		setMigrateFlagValues(cmd, flagOptions)
 		fallthrough
-	case "metadata":
+	case useMetadata:
 		setOptionalFlagValues(cmd, flagOptions)
 	}
 
