@@ -37,6 +37,5 @@ hasuraf migrate apply --admin-secret "<admin-secret>"`,
 }
 
 func init() {
-	migrateCmd.AddCommand(migrateApplyCmd)
 	setFlags(migrateApplyCmd)
 }

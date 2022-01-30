@@ -8,8 +8,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const useMetadata = "metadata"
+
 var metadataCmd = &cobra.Command{
-	Use:     "metadata",
+	Use:     useMetadata,
 	Aliases: []string{"md"},
 	Short:   "Manage Hasura GraphQL engine metadata saved in the database",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -25,5 +27,6 @@ var metadataCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(metadataCmd)
+	metadataCmd.AddCommand(metadataApplyCmd)
 	setFlags(metadataCmd)
 }
