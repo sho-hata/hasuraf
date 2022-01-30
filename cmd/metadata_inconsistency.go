@@ -27,5 +27,5 @@ var metadataInconsistencyCmd = &cobra.Command{
 
 func init() {
 	setFlags(metadataInconsistencyCmd)
-	metadataInconsistencyCmd.AddCommand(metadataInconsistencyDropCmd)
+	metadataInconsistencyCmd.AddCommand(metadataInconsistencyDropCmd, metadataInconsistencyListCmd)
 }
