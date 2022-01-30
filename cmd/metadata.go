@@ -27,6 +27,6 @@ var metadataCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(metadataCmd)
-	metadataCmd.AddCommand(metadataApplyCmd, metadataReloadCmd)
+	metadataCmd.AddCommand(metadataApplyCmd, metadataReloadCmd, metadataClearCmd)
 	setFlags(metadataCmd)
 }
