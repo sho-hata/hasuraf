@@ -10,7 +10,7 @@ import (
 
 var metadataClearCmd = &cobra.Command{
 	Use:   "clear",
-	Short: "Reload Hasura GraphQL engine metadata on the database.",
+	Short: "Clear Hasura GraphQL engine metadata on the database.",
 	Run: func(cmd *cobra.Command, args []string) {
 		if result, err := hasura.NewHasuraCmd("metadata clear", setFlagValues(cmd)).Run(); err != nil {
 			fmt.Println(result, err)
