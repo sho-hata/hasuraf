@@ -130,6 +130,9 @@ Compliant with [originnal](https://hasura.io/docs/latest/graphql/core/hasura-cli
 
 However, the `--version` option is not accepted.
 
+## supported hasura cli command(wip)
+You can run the hasura cli command as is.
+
 ## supported hasura config version
 
 [config v3](https://hasura.io/docs/latest/graphql/core/migrations/upgrade-v3.html)

@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const useSeed = "seed"
+
 var seedApplyHelpText = `
 Manage seed data.
 
@@ -13,7 +15,7 @@ Available Commands:
   apply       Find the file to apply and run the "hasura seed apply" command.`
 
 var seedCmd = &cobra.Command{
-	Use:   "seed",
+	Use:   useSeed,
 	Short: "Manage seed data.",
 	Long:  seedApplyHelpText,
 
