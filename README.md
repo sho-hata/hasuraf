@@ -126,7 +126,7 @@ hasura migrate delete --version XXX
 
 ### options
 
-Compliant with [originnal](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_migrate_delete.html#hasura-migrate-delete).
+Compliant with [original](https://hasura.io/docs/latest/graphql/core/hasura-cli/hasura_migrate_delete.html#hasura-migrate-delete).
 
 However, the `--version` option is not accepted.
 

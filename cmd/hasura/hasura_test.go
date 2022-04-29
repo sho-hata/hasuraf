@@ -6,8 +6,9 @@ import (
 	"testing"
 )
 
-func TestHasuraCmd_setCommand(t *testing.T) {
+func TestCmd_setCommand(t *testing.T) {
 	t.Parallel()
+
 	type fields struct {
 		called    string
 		command   []string
@@ -15,17 +16,18 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 		options   map[string]interface{}
 		target    string
 	}
+
 	tests := []struct {
 		name   string
 		fields fields
-		want   *HasuraCmd
+		want   *Cmd
 	}{
 		{
 			name: "case: not set h.target",
 			fields: fields{
 				called: "seed apply",
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "seed apply",
 				command: []string{"seed", "apply"},
 			},
@@ -36,7 +38,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 				called: "seed apply",
 				target: "xxx.sql",
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "seed apply",
 				target:  "xxx.sql",
 				command: []string{"seed", "apply", "--file", "xxx.sql"},
@@ -51,7 +53,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 					"admin-secret": "secret",
 				},
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "seed apply",
 				target:  "xxx.sql",
 				command: []string{"seed", "apply", "--file", "xxx.sql", "--admin-secret", "secret"},
@@ -69,7 +71,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 					"no-color": false,
 				},
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "seed apply",
 				target:  "xxx.sql",
 				command: []string{"seed", "apply", "--file", "xxx.sql", "--no-color", "false"},
@@ -88,7 +90,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 					"admin-secret": "secret",
 				},
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "seed apply",
 				target:  "xxx.sql",
 				command: []string{"seed", "apply", "--file", "xxx.sql", "--admin-secret", "secret", "--no-color", "false"},
@@ -104,7 +106,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 				called: "migrate",
 				target: "xxx.sql",
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called: "migrate",
 				target: "xxx.sql",
 			},
@@ -115,7 +117,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 				called: "migrate apply",
 				target: "xxx",
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "migrate apply",
 				target:  "xxx",
 				command: []string{"migrate", "apply", "--version", "xxx"},
@@ -130,7 +132,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 					"admin-secret": "secret",
 				},
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "migrate apply",
 				target:  "xxx",
 				command: []string{"migrate", "apply", "--version", "xxx", "--admin-secret", "secret"},
@@ -148,7 +150,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 					"no-color": false,
 				},
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "migrate apply",
 				target:  "xxx",
 				command: []string{"migrate", "apply", "--version", "xxx", "--no-color", "false"},
@@ -167,7 +169,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 					"admin-secret": "secret",
 				},
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "migrate apply",
 				target:  "xxx",
 				command: []string{"migrate", "apply", "--version", "xxx", "--admin-secret", "secret", "--no-color", "false"},
@@ -183,7 +185,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 				called: "migrate delete",
 				target: "xxx",
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "migrate delete",
 				target:  "xxx",
 				command: []string{"migrate", "delete", "--version", "xxx"},
@@ -198,7 +200,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 					"admin-secret": "secret",
 				},
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "migrate delete",
 				target:  "xxx",
 				command: []string{"migrate", "delete", "--version", "xxx", "--admin-secret", "secret"},
@@ -216,7 +218,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 					"no-color": false,
 				},
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "migrate delete",
 				target:  "xxx",
 				command: []string{"migrate", "delete", "--version", "xxx", "--no-color", "false"},
@@ -235,7 +237,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 					"admin-secret": "secret",
 				},
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called:  "migrate delete",
 				target:  "xxx",
 				command: []string{"migrate", "delete", "--version", "xxx", "--admin-secret", "secret", "--no-color", "false"},
@@ -251,7 +253,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 				called: "hoge",
 				target: "xxx",
 			},
-			want: &HasuraCmd{
+			want: &Cmd{
 				called: "hoge",
 				target: "xxx",
 			},
@@ -261,7 +263,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			h := &HasuraCmd{
+			h := &Cmd{
 				called:    tt.fields.called,
 				command:   tt.fields.command,
 				fileNames: tt.fields.fileNames,
@@ -275,16 +277,16 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 			sort.Strings(tt.want.fileNames)
 
 			if !reflect.DeepEqual(got.called, tt.want.called) {
-				t.Errorf("HasuraCmd.setCommand() = %v, want.called %v", got.called, tt.want.called)
+				t.Errorf("Cmd.setCommand() = %v, want.called %v", got.called, tt.want.called)
 			}
 			if !reflect.DeepEqual(got.target, tt.want.target) {
-				t.Errorf("HasuraCmd.setCommand() = %v, want.target %v", got.target, tt.want.target)
+				t.Errorf("Cmd.setCommand() = %v, want.target %v", got.target, tt.want.target)
 			}
 			if !reflect.DeepEqual(got.command, tt.want.command) {
-				t.Errorf("HasuraCmd.setCommand() = %v, want.command %v", got.command, tt.want.command)
+				t.Errorf("Cmd.setCommand() = %v, want.command %v", got.command, tt.want.command)
 			}
 			if !reflect.DeepEqual(got.fileNames, tt.want.fileNames) {
-				t.Errorf("HasuraCmd.setCommand() = %v, want.fileNames %v", got.fileNames, tt.want.fileNames)
+				t.Errorf("Cmd.setCommand() = %v, want.fileNames %v", got.fileNames, tt.want.fileNames)
 			}
 			if !reflect.DeepEqual(got.options, tt.want.options) {
 				for _, set := range tt.want.options {
@@ -292,15 +294,16 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 					for _, gotSet := range got.options {
 						if reflect.DeepEqual(set, gotSet) {
 							ok = true
+
 							break
 						}
 					}
 					if !ok {
-						t.Errorf("HasuraCmd.setCommand() = %v, want.options %v", got.options, tt.want.options)
+						t.Errorf("Cmd.setCommand() = %v, want.options %v", got.options, tt.want.options)
 					}
 				}
 				if len(tt.want.options) != len(got.options) {
-					t.Errorf("HasuraCmd.setCommand() = %v, want.options %v", got.options, tt.want.options)
+					t.Errorf("Cmd.setCommand() = %v, want.options %v", got.options, tt.want.options)
 				}
 			}
 		})

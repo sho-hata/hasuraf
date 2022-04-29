@@ -15,10 +15,12 @@ func setFlags(cmd *cobra.Command) {
 	switch category {
 	case useMigrate, useSeed:
 		setMigrateFlags(cmd)
+
 		fallthrough
 	case useMetadata, useInconsistency:
 		setOptionalFlags(cmd)
 	}
+
 	setGlobalFlags(cmd)
 }
 
@@ -44,15 +46,19 @@ func setMigrateFlags(cmd *cobra.Command) {
 
 func setFlagValues(cmd *cobra.Command) map[string]interface{} {
 	flagOptions := map[string]interface{}{}
+
 	var category string
+
 	if cmd.Parent().Use == rootCmd.Use {
 		category = cmd.Use
 	} else {
 		category = cmd.Parent().Use
 	}
+
 	switch category {
 	case useMigrate, useSeed:
 		setMigrateFlagValues(cmd, flagOptions)
+
 		fallthrough
 	case useMetadata, useInconsistency:
 		setOptionalFlagValues(cmd, flagOptions)
