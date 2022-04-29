@@ -18,7 +18,7 @@ const (
 	calledMigrateDelete string = "migrate delete"
 )
 
-var regex *regexp.Regexp
+var versionRegex *regexp.Regexp
 
 type Cmd struct {
 	called    string
@@ -158,9 +158,9 @@ func (h *Cmd) findOne() (string, error) {
 }
 
 func trimVersion(fileName string) string {
-	return string(regex.Find([]byte(fileName)))
+	return string(versionRegex.Find([]byte(fileName)))
 }
 
 func setRegex() {
-	regex = regexp.MustCompile(`^[0-9]+`)
+	versionRegex = regexp.MustCompile(`^[0-9]+`)
 }
