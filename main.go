@@ -1,6 +1,6 @@
 package main
 
-import "github.com/sho-hata/hasura-fzf/cmd"
+import "github.com/sho-hata/hasuraf/cmd"
 
 func main() {
 	cmd.Execute()

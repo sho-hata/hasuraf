@@ -1,4 +1,4 @@
-module github.com/sho-hata/hasura-fzf
+module github.com/sho-hata/hasuraf
 
 go 1.17
 

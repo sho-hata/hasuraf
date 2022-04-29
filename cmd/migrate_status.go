@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sho-hata/hasura-fzf/cmd/hasura"
+	"github.com/sho-hata/hasuraf/cmd/hasura"
 	"github.com/spf13/cobra"
 )
 

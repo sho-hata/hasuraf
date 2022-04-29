@@ -1,4 +1,4 @@
-project_name: hasura-fzf
+project_name: hasuraf
 env:
   - GO111MODULE=on
 before:
@@ -21,8 +21,8 @@ release:
 brews:
   - tap:
       owner: sho-hata
-      name: homebrew-hasura-fzf
+      name: homebrew-hasuraf
     folder: Formula
-    homepage: 'https://github.com/sho-hata/hasura-fzf'
-    description: 'This command has a fzf-like UI that allows you to find and run the file version used by the hasura cli command.'
+    homepage: "https://github.com/sho-hata/hasuraf"
+    description: "This command has a fzf-like UI that allows you to find and run the file version used by the hasura cli command."
     license: "MIT"

@@ -1,4 +1,4 @@
-# hasura-fzf
+# hasuraf
 
 This command has a fzf-like UI that allows you to find and run the file version used by the [hasura cli command](https://hasura.io/docs/latest/graphql/core/hasura-cli/index.html).
 
@@ -9,18 +9,18 @@ This command has a fzf-like UI that allows you to find and run the file version 
 ### homebrew
 
 ```
-brew install sho-hata/hasura-fzf/hasura-fzf
+brew install sho-hata/hasuraf/hasuraf
 ```
 
 ### go
 
 ```
-go install github.com/sho-hata/hasura-fzf@latest
+go install github.com/sho-hata/hasuraf@latest
 ```
 
 ## binary
 
-[releases](https://github.com/sho-hata/hasura-fzf/releases)
+[releases](https://github.com/sho-hata/hasuraf/releases)
 
 ## supported hasura cli commands
 

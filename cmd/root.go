@@ -16,7 +16,7 @@ ___  ___  ________  ________  ___  ___  ________  ________  ________
     \|__|\|__|\|__|\|__|\_________\|_______|\|__|\|__|\|__|\|__|\|__| 
                        \|_________|                                   
 
-docs: https://github.com/sho-hata/hasura-fzf
+docs: https://github.com/sho-hata/hasuraf
 `
 
 var rootCmd = &cobra.Command{
