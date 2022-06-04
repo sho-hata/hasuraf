@@ -3,7 +3,7 @@ package hasura
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"os/exec"
 	"regexp"
 	"strconv"
@@ -104,7 +104,7 @@ func (h *HasuraCmd) setFileNames() error {
 		return nil
 	}
 
-	files, err := ioutil.ReadDir(filePath)
+	files, err := os.ReadDir(filePath)
 	if err != nil {
 		return err
 	}
@@ -133,7 +133,10 @@ func (h *HasuraCmd) findOne() (string, error) {
 	for _, f := range h.fileNames {
 		fileNames = append(fileNames, fileName{f})
 	}
-	i, err := fuzzyfinder.Find(fileNames, func(i int) string { return fileNames[i].name })
+	i, err := fuzzyfinder.Find(
+		fileNames,
+		func(i int) string { return fileNames[i].name },
+	)
 	if err != nil {
 		return "", err
 	}
