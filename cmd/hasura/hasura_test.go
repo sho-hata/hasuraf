@@ -6,8 +6,9 @@ import (
 	"testing"
 )
 
-func TestHasuraCmd_setCommand(t *testing.T) {
+func TestCmd_setCommand(t *testing.T) {
 	t.Parallel()
+
 	type fields struct {
 		called  string
 		command []string
@@ -15,6 +16,7 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 		options map[string]interface{}
 		target  string
 	}
+
 	tests := []struct {
 		name   string
 		fields fields
@@ -273,13 +275,13 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 			sort.Strings(tt.want.command)
 
 			if !reflect.DeepEqual(got.called, tt.want.called) {
-				t.Errorf("HasuraCmd.setCommand() = %v, want.called %v", got.called, tt.want.called)
+				t.Errorf("Cmd.setCommand() = %v, want.called %v", got.called, tt.want.called)
 			}
 			if !reflect.DeepEqual(got.applyTarget, tt.want.applyTarget) {
 				t.Errorf("HasuraCmd.setCommand() = %v, want.target %v", got.applyTarget, tt.want.applyTarget)
 			}
 			if !reflect.DeepEqual(got.command, tt.want.command) {
-				t.Errorf("HasuraCmd.setCommand() = %v, want.command %v", got.command, tt.want.command)
+				t.Errorf("Cmd.setCommand() = %v, want.command %v", got.command, tt.want.command)
 			}
 			if !reflect.DeepEqual(got.files, tt.want.files) {
 				t.Errorf("HasuraCmd.setCommand() = %v, want.files %v", got.files, tt.want.files)
@@ -290,15 +292,16 @@ func TestHasuraCmd_setCommand(t *testing.T) {
 					for _, gotSet := range got.options {
 						if reflect.DeepEqual(set, gotSet) {
 							ok = true
+
 							break
 						}
 					}
 					if !ok {
-						t.Errorf("HasuraCmd.setCommand() = %v, want.options %v", got.options, tt.want.options)
+						t.Errorf("Cmd.setCommand() = %v, want.options %v", got.options, tt.want.options)
 					}
 				}
 				if len(tt.want.options) != len(got.options) {
-					t.Errorf("HasuraCmd.setCommand() = %v, want.options %v", got.options, tt.want.options)
+					t.Errorf("Cmd.setCommand() = %v, want.options %v", got.options, tt.want.options)
 				}
 			}
 		})

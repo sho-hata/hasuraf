@@ -19,7 +19,7 @@ const (
 	calledMigrateDelete string = "migrate delete"
 )
 
-var regex *regexp.Regexp
+var versionRegex *regexp.Regexp
 
 type HasuraCmd struct {
 	called      string
@@ -38,6 +38,7 @@ func NewHasuraCmd(called string, options map[string]interface{}) *HasuraCmd {
 	if called == calledMigrateApply || called == calledMigrateDelete {
 		setRegex()
 	}
+
 	return &HasuraCmd{called: called, options: options}
 }
 
@@ -45,9 +46,11 @@ func (h *HasuraCmd) Run() (string, error) {
 	if err := h.setFileNames(); err != nil {
 		return "", err
 	}
+
 	if err := h.setTarget(); err != nil {
 		return "", err
 	}
+
 	return h.setCommand().exec()
 }
 
@@ -56,6 +59,7 @@ func (h *HasuraCmd) exec() (string, error) {
 	fmt.Println("")
 
 	r, err := exec.Command("hasura", h.command...).CombinedOutput()
+
 	return string(r), err
 }
 
@@ -80,6 +84,7 @@ func (h *HasuraCmd) setCommand() *HasuraCmd {
 			h.command = append(h.command, strconv.FormatBool(v))
 		}
 	}
+
 	return h
 }
 
@@ -87,20 +92,24 @@ func (h *HasuraCmd) setTarget() error {
 	if len(h.files) == 0 {
 		return nil
 	}
+
 	fileName, err := h.findOne()
 	if err != nil {
 		return err
 	}
+
 	if h.called == calledMigrateApply || h.called == calledMigrateDelete {
 		h.applyTarget = trimVersion(fileName)
 	} else {
 		h.applyTarget = fileName
 	}
+
 	return nil
 }
 
 func (h *HasuraCmd) setFileNames() error {
 	var filePath string
+
 	switch h.called {
 	case CalledSeedApply:
 		filePath = fmt.Sprintf("./seeds/%s", h.options["database-name"])
@@ -114,6 +123,7 @@ func (h *HasuraCmd) setFileNames() error {
 	if err != nil {
 		return err
 	}
+
 	if len(files) == 0 {
 		return errors.New("no such file or directory")
 	}
@@ -128,6 +138,7 @@ func (h *HasuraCmd) setFileNames() error {
 				h.files = append(h.files, fileInfo{name: file.Name(), headline: headline})
 			}
 		}
+
 		if !file.IsDir() && h.called == CalledSeedApply {
 			headline, err := readFileHeadline("./seeds/default/" + file.Name())
 			if err != nil {
@@ -136,6 +147,7 @@ func (h *HasuraCmd) setFileNames() error {
 			h.files = append(h.files, fileInfo{name: file.Name(), headline: headline})
 		}
 	}
+
 	return nil
 }
 
@@ -161,11 +173,11 @@ func (h *HasuraCmd) findOne() (string, error) {
 }
 
 func trimVersion(fileName string) string {
-	return string(regex.Find([]byte(fileName)))
+	return string(versionRegex.Find([]byte(fileName)))
 }
 
 func setRegex() {
-	regex = regexp.MustCompile(`^[0-9]+`)
+	versionRegex = regexp.MustCompile(`^[0-9]+`)
 }
 
 // readFileHeadline
