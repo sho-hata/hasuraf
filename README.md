@@ -2,7 +2,7 @@
 
 This command has a fzf-like UI that allows you to find and run the file version used by the [hasura cli command](https://hasura.io/docs/latest/graphql/core/hasura-cli/index.html).
 
-<img src="https://media1.giphy.com/media/aZur3hP0ke0p7vJrH8/giphy.gif?cid=790b761159378e0f6a9e19ab11981ecac39458e1a3f2db2f&rid=giphy.gif&ct=g">
+<img src="https://media2.giphy.com/media/6zZbDw7kLwT81k7fuD/giphy.gif?cid=790b7611491c3b59f640e8c9e9ad7e2d9fdeaa0b2a84cab8&rid=giphy.gif&ct=g">
 
 ## install
 

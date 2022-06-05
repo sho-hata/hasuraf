@@ -1,9 +1,10 @@
 package hasura
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"os/exec"
 	"regexp"
 	"strconv"
@@ -20,23 +21,28 @@ const (
 
 var versionRegex *regexp.Regexp
 
-type Cmd struct {
-	called    string
-	command   []string
-	fileNames []string
-	options   map[string]interface{}
-	target    string
+type HasuraCmd struct {
+	called      string
+	command     []string
+	options     map[string]interface{}
+	files       []fileInfo
+	applyTarget string
 }
 
-func NewHasuraCmd(called string, options map[string]interface{}) *Cmd {
+type fileInfo struct {
+	name     string
+	headline string
+}
+
+func NewHasuraCmd(called string, options map[string]interface{}) *HasuraCmd {
 	if called == calledMigrateApply || called == calledMigrateDelete {
 		setRegex()
 	}
 
-	return &Cmd{called: called, options: options}
+	return &HasuraCmd{called: called, options: options}
 }
 
-func (h *Cmd) Run() (string, error) {
+func (h *HasuraCmd) Run() (string, error) {
 	if err := h.setFileNames(); err != nil {
 		return "", err
 	}
@@ -48,7 +54,7 @@ func (h *Cmd) Run() (string, error) {
 	return h.setCommand().exec()
 }
 
-func (h *Cmd) exec() (string, error) {
+func (h *HasuraCmd) exec() (string, error) {
 	fmt.Println("running... ", "hasura", strings.Join(h.command, " "))
 	fmt.Println("")
 
@@ -57,15 +63,14 @@ func (h *Cmd) exec() (string, error) {
 	return string(r), err
 }
 
-func (h *Cmd) setCommand() *Cmd {
+func (h *HasuraCmd) setCommand() *HasuraCmd {
 	switch h.called {
 	case CalledSeedApply:
-		h.command = append(strings.Split(h.called, " "), []string{"--file", h.target}...)
+		h.command = append(strings.Split(h.called, " "), []string{"--file", h.applyTarget}...)
 	case calledMigrateApply, calledMigrateDelete:
-		h.command = append(strings.Split(h.called, " "), []string{"--version", h.target}...)
+		h.command = append(strings.Split(h.called, " "), []string{"--version", h.applyTarget}...)
 	}
-
-	if h.target == "" {
+	if h.applyTarget == "" {
 		h.command = strings.Split(h.called, " ")
 	}
 
@@ -83,8 +88,8 @@ func (h *Cmd) setCommand() *Cmd {
 	return h
 }
 
-func (h *Cmd) setTarget() error {
-	if len(h.fileNames) == 0 {
+func (h *HasuraCmd) setTarget() error {
+	if len(h.files) == 0 {
 		return nil
 	}
 
@@ -94,15 +99,15 @@ func (h *Cmd) setTarget() error {
 	}
 
 	if h.called == calledMigrateApply || h.called == calledMigrateDelete {
-		h.target = trimVersion(fileName)
+		h.applyTarget = trimVersion(fileName)
 	} else {
-		h.target = fileName
+		h.applyTarget = fileName
 	}
 
 	return nil
 }
 
-func (h *Cmd) setFileNames() error {
+func (h *HasuraCmd) setFileNames() error {
 	var filePath string
 
 	switch h.called {
@@ -114,47 +119,57 @@ func (h *Cmd) setFileNames() error {
 		return nil
 	}
 
-	files, err := ioutil.ReadDir(filePath)
+	files, err := os.ReadDir(filePath)
 	if err != nil {
 		return err
 	}
 
 	if len(files) == 0 {
-		return errors.New("no file")
+		return errors.New("no such file or directory")
 	}
 
 	for _, file := range files {
 		if file.IsDir() {
 			if h.called == calledMigrateApply || h.called == calledMigrateDelete {
-				h.fileNames = append(h.fileNames, file.Name())
+				headline, err := readFileHeadline("./migrations/default/" + file.Name() + "/up.sql")
+				if err != nil {
+					return err
+				}
+				h.files = append(h.files, fileInfo{name: file.Name(), headline: headline})
 			}
 		}
 
 		if !file.IsDir() && h.called == CalledSeedApply {
-			h.fileNames = append(h.fileNames, file.Name())
+			headline, err := readFileHeadline("./seeds/default/" + file.Name())
+			if err != nil {
+				return err
+			}
+			h.files = append(h.files, fileInfo{name: file.Name(), headline: headline})
 		}
 	}
 
 	return nil
 }
 
-func (h *Cmd) findOne() (string, error) {
-	type fileName struct {
-		name string
-	}
+func (h *HasuraCmd) findOne() (string, error) {
+	i, err := fuzzyfinder.Find(
+		h.files,
+		func(i int) string { return h.files[i].name },
+		fuzzyfinder.WithPreviewWindow(func(i, width, height int) string {
+			if i == -1 {
+				return ""
+			}
+			return fmt.Sprintf(`📝 Applied SQL file
 
-	fileNames := make([]fileName, 0, len(h.fileNames))
-
-	for _, f := range h.fileNames {
-		fileNames = append(fileNames, fileName{f})
-	}
-
-	i, err := fuzzyfinder.Find(fileNames, func(i int) string { return fileNames[i].name })
+			%s
+			...
+			`, h.files[i].headline)
+		}),
+	)
 	if err != nil {
 		return "", err
 	}
-
-	return fileNames[i].name, nil
+	return h.files[i].name, nil
 }
 
 func trimVersion(fileName string) string {
@@ -163,4 +178,27 @@ func trimVersion(fileName string) string {
 
 func setRegex() {
 	versionRegex = regexp.MustCompile(`^[0-9]+`)
+}
+
+// readFileHeadline
+// Opens a file in the path passed as an argument, reads the first three lines, and returns them as a string.
+func readFileHeadline(path string) (string, error) {
+	var headline string
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+
+	var count int
+	for scanner.Scan() {
+		if count == 4 {
+			headline += scanner.Text()
+			break
+		}
+		headline += fmt.Sprintln(scanner.Text())
+		count++
+	}
+	return headline, nil
 }

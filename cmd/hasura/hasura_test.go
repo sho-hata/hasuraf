@@ -10,24 +10,24 @@ func TestCmd_setCommand(t *testing.T) {
 	t.Parallel()
 
 	type fields struct {
-		called    string
-		command   []string
-		fileNames []string
-		options   map[string]interface{}
-		target    string
+		called  string
+		command []string
+		files   []fileInfo
+		options map[string]interface{}
+		target  string
 	}
 
 	tests := []struct {
 		name   string
 		fields fields
-		want   *Cmd
+		want   *HasuraCmd
 	}{
 		{
 			name: "case: not set h.target",
 			fields: fields{
 				called: "seed apply",
 			},
-			want: &Cmd{
+			want: &HasuraCmd{
 				called:  "seed apply",
 				command: []string{"seed", "apply"},
 			},
@@ -38,10 +38,10 @@ func TestCmd_setCommand(t *testing.T) {
 				called: "seed apply",
 				target: "xxx.sql",
 			},
-			want: &Cmd{
-				called:  "seed apply",
-				target:  "xxx.sql",
-				command: []string{"seed", "apply", "--file", "xxx.sql"},
+			want: &HasuraCmd{
+				called:      "seed apply",
+				applyTarget: "xxx.sql",
+				command:     []string{"seed", "apply", "--file", "xxx.sql"},
 			},
 		},
 		{
@@ -53,10 +53,10 @@ func TestCmd_setCommand(t *testing.T) {
 					"admin-secret": "secret",
 				},
 			},
-			want: &Cmd{
-				called:  "seed apply",
-				target:  "xxx.sql",
-				command: []string{"seed", "apply", "--file", "xxx.sql", "--admin-secret", "secret"},
+			want: &HasuraCmd{
+				called:      "seed apply",
+				applyTarget: "xxx.sql",
+				command:     []string{"seed", "apply", "--file", "xxx.sql", "--admin-secret", "secret"},
 				options: map[string]interface{}{
 					"admin-secret": "secret",
 				},
@@ -71,10 +71,10 @@ func TestCmd_setCommand(t *testing.T) {
 					"no-color": false,
 				},
 			},
-			want: &Cmd{
-				called:  "seed apply",
-				target:  "xxx.sql",
-				command: []string{"seed", "apply", "--file", "xxx.sql", "--no-color", "false"},
+			want: &HasuraCmd{
+				called:      "seed apply",
+				applyTarget: "xxx.sql",
+				command:     []string{"seed", "apply", "--file", "xxx.sql", "--no-color", "false"},
 				options: map[string]interface{}{
 					"no-color": false,
 				},
@@ -90,10 +90,10 @@ func TestCmd_setCommand(t *testing.T) {
 					"admin-secret": "secret",
 				},
 			},
-			want: &Cmd{
-				called:  "seed apply",
-				target:  "xxx.sql",
-				command: []string{"seed", "apply", "--file", "xxx.sql", "--admin-secret", "secret", "--no-color", "false"},
+			want: &HasuraCmd{
+				called:      "seed apply",
+				applyTarget: "xxx.sql",
+				command:     []string{"seed", "apply", "--file", "xxx.sql", "--admin-secret", "secret", "--no-color", "false"},
 				options: map[string]interface{}{
 					"no-color":     false,
 					"admin-secret": "secret",
@@ -106,9 +106,9 @@ func TestCmd_setCommand(t *testing.T) {
 				called: "migrate",
 				target: "xxx.sql",
 			},
-			want: &Cmd{
-				called: "migrate",
-				target: "xxx.sql",
+			want: &HasuraCmd{
+				called:      "migrate",
+				applyTarget: "xxx.sql",
 			},
 		},
 		{
@@ -117,10 +117,10 @@ func TestCmd_setCommand(t *testing.T) {
 				called: "migrate apply",
 				target: "xxx",
 			},
-			want: &Cmd{
-				called:  "migrate apply",
-				target:  "xxx",
-				command: []string{"migrate", "apply", "--version", "xxx"},
+			want: &HasuraCmd{
+				called:      "migrate apply",
+				applyTarget: "xxx",
+				command:     []string{"migrate", "apply", "--version", "xxx"},
 			},
 		},
 		{
@@ -132,10 +132,10 @@ func TestCmd_setCommand(t *testing.T) {
 					"admin-secret": "secret",
 				},
 			},
-			want: &Cmd{
-				called:  "migrate apply",
-				target:  "xxx",
-				command: []string{"migrate", "apply", "--version", "xxx", "--admin-secret", "secret"},
+			want: &HasuraCmd{
+				called:      "migrate apply",
+				applyTarget: "xxx",
+				command:     []string{"migrate", "apply", "--version", "xxx", "--admin-secret", "secret"},
 				options: map[string]interface{}{
 					"admin-secret": "secret",
 				},
@@ -150,10 +150,10 @@ func TestCmd_setCommand(t *testing.T) {
 					"no-color": false,
 				},
 			},
-			want: &Cmd{
-				called:  "migrate apply",
-				target:  "xxx",
-				command: []string{"migrate", "apply", "--version", "xxx", "--no-color", "false"},
+			want: &HasuraCmd{
+				called:      "migrate apply",
+				applyTarget: "xxx",
+				command:     []string{"migrate", "apply", "--version", "xxx", "--no-color", "false"},
 				options: map[string]interface{}{
 					"no-color": false,
 				},
@@ -169,10 +169,10 @@ func TestCmd_setCommand(t *testing.T) {
 					"admin-secret": "secret",
 				},
 			},
-			want: &Cmd{
-				called:  "migrate apply",
-				target:  "xxx",
-				command: []string{"migrate", "apply", "--version", "xxx", "--admin-secret", "secret", "--no-color", "false"},
+			want: &HasuraCmd{
+				called:      "migrate apply",
+				applyTarget: "xxx",
+				command:     []string{"migrate", "apply", "--version", "xxx", "--admin-secret", "secret", "--no-color", "false"},
 				options: map[string]interface{}{
 					"no-color":     false,
 					"admin-secret": "secret",
@@ -185,10 +185,10 @@ func TestCmd_setCommand(t *testing.T) {
 				called: "migrate delete",
 				target: "xxx",
 			},
-			want: &Cmd{
-				called:  "migrate delete",
-				target:  "xxx",
-				command: []string{"migrate", "delete", "--version", "xxx"},
+			want: &HasuraCmd{
+				called:      "migrate delete",
+				applyTarget: "xxx",
+				command:     []string{"migrate", "delete", "--version", "xxx"},
 			},
 		},
 		{
@@ -200,10 +200,10 @@ func TestCmd_setCommand(t *testing.T) {
 					"admin-secret": "secret",
 				},
 			},
-			want: &Cmd{
-				called:  "migrate delete",
-				target:  "xxx",
-				command: []string{"migrate", "delete", "--version", "xxx", "--admin-secret", "secret"},
+			want: &HasuraCmd{
+				called:      "migrate delete",
+				applyTarget: "xxx",
+				command:     []string{"migrate", "delete", "--version", "xxx", "--admin-secret", "secret"},
 				options: map[string]interface{}{
 					"admin-secret": "secret",
 				},
@@ -218,10 +218,10 @@ func TestCmd_setCommand(t *testing.T) {
 					"no-color": false,
 				},
 			},
-			want: &Cmd{
-				called:  "migrate delete",
-				target:  "xxx",
-				command: []string{"migrate", "delete", "--version", "xxx", "--no-color", "false"},
+			want: &HasuraCmd{
+				called:      "migrate delete",
+				applyTarget: "xxx",
+				command:     []string{"migrate", "delete", "--version", "xxx", "--no-color", "false"},
 				options: map[string]interface{}{
 					"no-color": false,
 				},
@@ -237,10 +237,10 @@ func TestCmd_setCommand(t *testing.T) {
 					"admin-secret": "secret",
 				},
 			},
-			want: &Cmd{
-				called:  "migrate delete",
-				target:  "xxx",
-				command: []string{"migrate", "delete", "--version", "xxx", "--admin-secret", "secret", "--no-color", "false"},
+			want: &HasuraCmd{
+				called:      "migrate delete",
+				applyTarget: "xxx",
+				command:     []string{"migrate", "delete", "--version", "xxx", "--admin-secret", "secret", "--no-color", "false"},
 				options: map[string]interface{}{
 					"no-color":     false,
 					"admin-secret": "secret",
@@ -253,9 +253,9 @@ func TestCmd_setCommand(t *testing.T) {
 				called: "hoge",
 				target: "xxx",
 			},
-			want: &Cmd{
-				called: "hoge",
-				target: "xxx",
+			want: &HasuraCmd{
+				called:      "hoge",
+				applyTarget: "xxx",
 			},
 		},
 	}
@@ -263,30 +263,28 @@ func TestCmd_setCommand(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			h := &Cmd{
-				called:    tt.fields.called,
-				command:   tt.fields.command,
-				fileNames: tt.fields.fileNames,
-				options:   tt.fields.options,
-				target:    tt.fields.target,
+			h := &HasuraCmd{
+				called:      tt.fields.called,
+				command:     tt.fields.command,
+				files:       tt.fields.files,
+				options:     tt.fields.options,
+				applyTarget: tt.fields.target,
 			}
 			got := h.setCommand()
 			sort.Strings(got.command)
 			sort.Strings(tt.want.command)
-			sort.Strings(got.fileNames)
-			sort.Strings(tt.want.fileNames)
 
 			if !reflect.DeepEqual(got.called, tt.want.called) {
 				t.Errorf("Cmd.setCommand() = %v, want.called %v", got.called, tt.want.called)
 			}
-			if !reflect.DeepEqual(got.target, tt.want.target) {
-				t.Errorf("Cmd.setCommand() = %v, want.target %v", got.target, tt.want.target)
+			if !reflect.DeepEqual(got.applyTarget, tt.want.applyTarget) {
+				t.Errorf("HasuraCmd.setCommand() = %v, want.target %v", got.applyTarget, tt.want.applyTarget)
 			}
 			if !reflect.DeepEqual(got.command, tt.want.command) {
 				t.Errorf("Cmd.setCommand() = %v, want.command %v", got.command, tt.want.command)
 			}
-			if !reflect.DeepEqual(got.fileNames, tt.want.fileNames) {
-				t.Errorf("Cmd.setCommand() = %v, want.fileNames %v", got.fileNames, tt.want.fileNames)
+			if !reflect.DeepEqual(got.files, tt.want.files) {
+				t.Errorf("HasuraCmd.setCommand() = %v, want.files %v", got.files, tt.want.files)
 			}
 			if !reflect.DeepEqual(got.options, tt.want.options) {
 				for _, set := range tt.want.options {
