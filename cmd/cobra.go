@@ -44,8 +44,8 @@ func setMigrateFlags(cmd *cobra.Command) {
 	cmd.Flags().Bool("disable-interactive", false, "disables interactive prompts (default: false)")
 }
 
-func setFlagValues(cmd *cobra.Command) map[string]interface{} {
-	flagOptions := map[string]interface{}{}
+func setFlagValues(cmd *cobra.Command) map[string]any {
+	flagOptions := map[string]any{}
 
 	var category string
 
@@ -68,7 +68,7 @@ func setFlagValues(cmd *cobra.Command) map[string]interface{} {
 	return flagOptions
 }
 
-func setGlobalFlagValues(cmd *cobra.Command, flagOptions map[string]interface{}) {
+func setGlobalFlagValues(cmd *cobra.Command, flagOptions map[string]any) {
 	if envFileFlag, _ := cmd.Flags().GetString("envfile"); envFileFlag != "" {
 		flagOptions["envfile"] = envFileFlag
 	}
@@ -86,7 +86,7 @@ func setGlobalFlagValues(cmd *cobra.Command, flagOptions map[string]interface{})
 	}
 }
 
-func setOptionalFlagValues(cmd *cobra.Command, flagOptions map[string]interface{}) {
+func setOptionalFlagValues(cmd *cobra.Command, flagOptions map[string]any) {
 	if adminSecretFlag, _ := cmd.Flags().GetString("admin-secret"); adminSecretFlag != "" {
 		flagOptions["admin-secret"] = adminSecretFlag
 	}
@@ -101,7 +101,7 @@ func setOptionalFlagValues(cmd *cobra.Command, flagOptions map[string]interface{
 	}
 }
 
-func setMigrateFlagValues(cmd *cobra.Command, flagOptions map[string]interface{}) {
+func setMigrateFlagValues(cmd *cobra.Command, flagOptions map[string]any) {
 	if databaseNameFlag, _ := cmd.Flags().GetString("database-name"); databaseNameFlag != "" {
 		flagOptions["database-name"] = databaseNameFlag
 	}
