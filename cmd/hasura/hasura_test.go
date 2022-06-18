@@ -17,13 +17,11 @@ func TestCmd_setCommand(t *testing.T) {
 		target  string
 	}
 
-	tests := []struct {
-		name   string
+	tests := map[string]struct {
 		fields fields
 		want   *HasuraCmd
 	}{
-		{
-			name: "case: not set h.target",
+		"case: not set h.target": {
 			fields: fields{
 				called: "seed apply",
 			},
@@ -32,8 +30,7 @@ func TestCmd_setCommand(t *testing.T) {
 				command: []string{"seed", "apply"},
 			},
 		},
-		{
-			name: "case: h.called == 'seed apply'",
+		"case: h.called == 'seed apply'": {
 			fields: fields{
 				called: "seed apply",
 				target: "xxx.sql",
@@ -44,8 +41,7 @@ func TestCmd_setCommand(t *testing.T) {
 				command:     []string{"seed", "apply", "--file", "xxx.sql"},
 			},
 		},
-		{
-			name: "case: h.called == 'seed apply', set string options",
+		"case: h.called == 'seed apply', set string options": {
 			fields: fields{
 				called: "seed apply",
 				target: "xxx.sql",
@@ -62,8 +58,7 @@ func TestCmd_setCommand(t *testing.T) {
 				},
 			},
 		},
-		{
-			name: "case: h.called == 'seed apply', set bool options",
+		"case: h.called == 'seed apply', set bool options": {
 			fields: fields{
 				called: "seed apply",
 				target: "xxx.sql",
@@ -80,8 +75,7 @@ func TestCmd_setCommand(t *testing.T) {
 				},
 			},
 		},
-		{
-			name: "case: h.called == 'seed apply', set bool and string options",
+		"case: h.called == 'seed apply', set bool and string options": {
 			fields: fields{
 				called: "seed apply",
 				target: "xxx.sql",
@@ -100,8 +94,7 @@ func TestCmd_setCommand(t *testing.T) {
 				},
 			},
 		},
-		{
-			name: "case: h.called != 'seed apply'",
+		"case: h.called != 'seed apply'": {
 			fields: fields{
 				called: "migrate",
 				target: "xxx.sql",
@@ -111,8 +104,7 @@ func TestCmd_setCommand(t *testing.T) {
 				applyTarget: "xxx.sql",
 			},
 		},
-		{
-			name: "case: h.called == 'migrate apply'",
+		"case: h.called == 'migrate apply'": {
 			fields: fields{
 				called: "migrate apply",
 				target: "xxx",
@@ -123,8 +115,7 @@ func TestCmd_setCommand(t *testing.T) {
 				command:     []string{"migrate", "apply", "--version", "xxx"},
 			},
 		},
-		{
-			name: "case: h.called == 'migrate apply', set string options",
+		"case: h.called == 'migrate apply', set string options": {
 			fields: fields{
 				called: "migrate apply",
 				target: "xxx",
@@ -141,8 +132,7 @@ func TestCmd_setCommand(t *testing.T) {
 				},
 			},
 		},
-		{
-			name: "case: h.called == 'migrate apply', set bool options",
+		"case: h.called == 'migrate apply', set bool options": {
 			fields: fields{
 				called: "migrate apply",
 				target: "xxx",
@@ -159,8 +149,7 @@ func TestCmd_setCommand(t *testing.T) {
 				},
 			},
 		},
-		{
-			name: "case: h.called == 'migrate', set bool and string options",
+		"case: h.called == 'migrate', set bool and string options": {
 			fields: fields{
 				called: "migrate apply",
 				target: "xxx",
@@ -179,8 +168,7 @@ func TestCmd_setCommand(t *testing.T) {
 				},
 			},
 		},
-		{
-			name: "case: h.called == 'migrate delete'",
+		"case: h.called == 'migrate delete'": {
 			fields: fields{
 				called: "migrate delete",
 				target: "xxx",
@@ -191,8 +179,7 @@ func TestCmd_setCommand(t *testing.T) {
 				command:     []string{"migrate", "delete", "--version", "xxx"},
 			},
 		},
-		{
-			name: "case: h.called == 'migrate delete', set string options",
+		"case: h.called == 'migrate delete', set string options": {
 			fields: fields{
 				called: "migrate delete",
 				target: "xxx",
@@ -209,8 +196,7 @@ func TestCmd_setCommand(t *testing.T) {
 				},
 			},
 		},
-		{
-			name: "case: h.called == 'migrate delete', set bool options",
+		"case: h.called == 'migrate delete', set bool options": {
 			fields: fields{
 				called: "migrate delete",
 				target: "xxx",
@@ -227,8 +213,7 @@ func TestCmd_setCommand(t *testing.T) {
 				},
 			},
 		},
-		{
-			name: "case: h.called == 'migrate', set bool and string options",
+		"case: h.called == 'migrate delete', set bool and string options": {
 			fields: fields{
 				called: "migrate delete",
 				target: "xxx",
@@ -247,8 +232,7 @@ func TestCmd_setCommand(t *testing.T) {
 				},
 			},
 		},
-		{
-			name: "case: h.called != 'seed apply' & h.called != 'migrate apply & h.called != 'migrate delete'",
+		"case: h.called != 'seed apply' & h.called != 'migrate apply & h.called != 'migrate delete'": {
 			fields: fields{
 				called: "hoge",
 				target: "xxx",
@@ -259,9 +243,9 @@ func TestCmd_setCommand(t *testing.T) {
 			},
 		},
 	}
-	for _, tt := range tests {
+	for testCase, tt := range tests {
 		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
+		t.Run(testCase, func(t *testing.T) {
 			t.Parallel()
 			h := &HasuraCmd{
 				called:      tt.fields.called,
