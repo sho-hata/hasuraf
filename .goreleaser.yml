@@ -7,6 +7,7 @@ before:
 builds:
   - main: .
     binary: hasuraf
+    ldflags: -s -w
 archives:
   - replacements:
       darwin: darwin
