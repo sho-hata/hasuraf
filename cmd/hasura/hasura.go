@@ -24,7 +24,7 @@ var versionRegex *regexp.Regexp
 type HasuraCmd struct {
 	called      string
 	command     []string
-	options     map[string]any
+	options     map[string]interface{}
 	files       []fileInfo
 	applyTarget string
 }
@@ -34,7 +34,7 @@ type fileInfo struct {
 	headline string
 }
 
-func NewHasuraCmd(called string, options map[string]any) *HasuraCmd {
+func NewHasuraCmd(called string, options map[string]interface{}) *HasuraCmd {
 	if called == calledMigrateApply || called == calledMigrateDelete {
 		setRegex()
 	}

@@ -13,7 +13,7 @@ func TestCmd_setCommand(t *testing.T) {
 		called  string
 		command []string
 		files   []fileInfo
-		options map[string]any
+		options map[string]interface{}
 		target  string
 	}
 
@@ -45,7 +45,7 @@ func TestCmd_setCommand(t *testing.T) {
 			fields: fields{
 				called: "seed apply",
 				target: "xxx.sql",
-				options: map[string]any{
+				options: map[string]interface{}{
 					"admin-secret": "secret",
 				},
 			},
@@ -53,7 +53,7 @@ func TestCmd_setCommand(t *testing.T) {
 				called:      "seed apply",
 				applyTarget: "xxx.sql",
 				command:     []string{"seed", "apply", "--file", "xxx.sql", "--admin-secret", "secret"},
-				options: map[string]any{
+				options: map[string]interface{}{
 					"admin-secret": "secret",
 				},
 			},
@@ -62,7 +62,7 @@ func TestCmd_setCommand(t *testing.T) {
 			fields: fields{
 				called: "seed apply",
 				target: "xxx.sql",
-				options: map[string]any{
+				options: map[string]interface{}{
 					"no-color": false,
 				},
 			},
@@ -70,7 +70,7 @@ func TestCmd_setCommand(t *testing.T) {
 				called:      "seed apply",
 				applyTarget: "xxx.sql",
 				command:     []string{"seed", "apply", "--file", "xxx.sql", "--no-color", "false"},
-				options: map[string]any{
+				options: map[string]interface{}{
 					"no-color": false,
 				},
 			},
@@ -79,7 +79,7 @@ func TestCmd_setCommand(t *testing.T) {
 			fields: fields{
 				called: "seed apply",
 				target: "xxx.sql",
-				options: map[string]any{
+				options: map[string]interface{}{
 					"no-color":     false,
 					"admin-secret": "secret",
 				},
@@ -88,7 +88,7 @@ func TestCmd_setCommand(t *testing.T) {
 				called:      "seed apply",
 				applyTarget: "xxx.sql",
 				command:     []string{"seed", "apply", "--file", "xxx.sql", "--admin-secret", "secret", "--no-color", "false"},
-				options: map[string]any{
+				options: map[string]interface{}{
 					"no-color":     false,
 					"admin-secret": "secret",
 				},
@@ -119,7 +119,7 @@ func TestCmd_setCommand(t *testing.T) {
 			fields: fields{
 				called: "migrate apply",
 				target: "xxx",
-				options: map[string]any{
+				options: map[string]interface{}{
 					"admin-secret": "secret",
 				},
 			},
@@ -127,7 +127,7 @@ func TestCmd_setCommand(t *testing.T) {
 				called:      "migrate apply",
 				applyTarget: "xxx",
 				command:     []string{"migrate", "apply", "--version", "xxx", "--admin-secret", "secret"},
-				options: map[string]any{
+				options: map[string]interface{}{
 					"admin-secret": "secret",
 				},
 			},
@@ -136,7 +136,7 @@ func TestCmd_setCommand(t *testing.T) {
 			fields: fields{
 				called: "migrate apply",
 				target: "xxx",
-				options: map[string]any{
+				options: map[string]interface{}{
 					"no-color": false,
 				},
 			},
@@ -144,7 +144,7 @@ func TestCmd_setCommand(t *testing.T) {
 				called:      "migrate apply",
 				applyTarget: "xxx",
 				command:     []string{"migrate", "apply", "--version", "xxx", "--no-color", "false"},
-				options: map[string]any{
+				options: map[string]interface{}{
 					"no-color": false,
 				},
 			},
@@ -153,7 +153,7 @@ func TestCmd_setCommand(t *testing.T) {
 			fields: fields{
 				called: "migrate apply",
 				target: "xxx",
-				options: map[string]any{
+				options: map[string]interface{}{
 					"no-color":     false,
 					"admin-secret": "secret",
 				},
@@ -162,7 +162,7 @@ func TestCmd_setCommand(t *testing.T) {
 				called:      "migrate apply",
 				applyTarget: "xxx",
 				command:     []string{"migrate", "apply", "--version", "xxx", "--admin-secret", "secret", "--no-color", "false"},
-				options: map[string]any{
+				options: map[string]interface{}{
 					"no-color":     false,
 					"admin-secret": "secret",
 				},
@@ -183,7 +183,7 @@ func TestCmd_setCommand(t *testing.T) {
 			fields: fields{
 				called: "migrate delete",
 				target: "xxx",
-				options: map[string]any{
+				options: map[string]interface{}{
 					"admin-secret": "secret",
 				},
 			},
@@ -191,7 +191,7 @@ func TestCmd_setCommand(t *testing.T) {
 				called:      "migrate delete",
 				applyTarget: "xxx",
 				command:     []string{"migrate", "delete", "--version", "xxx", "--admin-secret", "secret"},
-				options: map[string]any{
+				options: map[string]interface{}{
 					"admin-secret": "secret",
 				},
 			},
@@ -200,7 +200,7 @@ func TestCmd_setCommand(t *testing.T) {
 			fields: fields{
 				called: "migrate delete",
 				target: "xxx",
-				options: map[string]any{
+				options: map[string]interface{}{
 					"no-color": false,
 				},
 			},
@@ -208,7 +208,7 @@ func TestCmd_setCommand(t *testing.T) {
 				called:      "migrate delete",
 				applyTarget: "xxx",
 				command:     []string{"migrate", "delete", "--version", "xxx", "--no-color", "false"},
-				options: map[string]any{
+				options: map[string]interface{}{
 					"no-color": false,
 				},
 			},
@@ -217,7 +217,7 @@ func TestCmd_setCommand(t *testing.T) {
 			fields: fields{
 				called: "migrate delete",
 				target: "xxx",
-				options: map[string]any{
+				options: map[string]interface{}{
 					"no-color":     false,
 					"admin-secret": "secret",
 				},
@@ -226,7 +226,7 @@ func TestCmd_setCommand(t *testing.T) {
 				called:      "migrate delete",
 				applyTarget: "xxx",
 				command:     []string{"migrate", "delete", "--version", "xxx", "--admin-secret", "secret", "--no-color", "false"},
-				options: map[string]any{
+				options: map[string]interface{}{
 					"no-color":     false,
 					"admin-secret": "secret",
 				},

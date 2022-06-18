@@ -14,14 +14,6 @@ jobs:
       - name: check out
         uses: actions/checkout@v3
 
-      - name: Cache
-        uses: actions/cache@v2.1.0
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-v1.18-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-
   build:
     needs: setup
     runs-on: ubuntu-latest
