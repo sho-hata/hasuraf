@@ -15,8 +15,8 @@ import (
 
 const (
 	CalledSeedApply     string = "seed apply"
-	calledMigrateApply  string = "migrate apply"
-	calledMigrateDelete string = "migrate delete"
+	CalledMigrateApply  string = "migrate apply"
+	CalledMigrateDelete string = "migrate delete"
 )
 
 var versionRegex *regexp.Regexp
@@ -35,7 +35,7 @@ type fileInfo struct {
 }
 
 func NewHasuraCmd(called string, options map[string]interface{}) *HasuraCmd {
-	if called == calledMigrateApply || called == calledMigrateDelete {
+	if called == CalledMigrateApply || called == CalledMigrateDelete {
 		setRegex()
 	}
 
@@ -67,7 +67,7 @@ func (h *HasuraCmd) setCommand() *HasuraCmd {
 	switch h.called {
 	case CalledSeedApply:
 		h.command = append(strings.Split(h.called, " "), []string{"--file", h.applyTarget}...)
-	case calledMigrateApply, calledMigrateDelete:
+	case CalledMigrateApply, CalledMigrateDelete:
 		h.command = append(strings.Split(h.called, " "), []string{"--version", h.applyTarget}...)
 	}
 	if h.applyTarget == "" {
@@ -98,7 +98,7 @@ func (h *HasuraCmd) setTarget() error {
 		return err
 	}
 
-	if h.called == calledMigrateApply || h.called == calledMigrateDelete {
+	if h.called == CalledMigrateApply || h.called == CalledMigrateDelete {
 		h.applyTarget = trimVersion(fileName)
 	} else {
 		h.applyTarget = fileName
@@ -113,7 +113,7 @@ func (h *HasuraCmd) setFileNames() error {
 	switch h.called {
 	case CalledSeedApply:
 		filePath = fmt.Sprintf("./seeds/%s", h.options["database-name"])
-	case calledMigrateApply, calledMigrateDelete:
+	case CalledMigrateApply, CalledMigrateDelete:
 		filePath = fmt.Sprintf("./migrations/%s", h.options["database-name"])
 	default:
 		return nil
@@ -130,7 +130,7 @@ func (h *HasuraCmd) setFileNames() error {
 
 	for _, file := range files {
 		if file.IsDir() {
-			if h.called == calledMigrateApply || h.called == calledMigrateDelete {
+			if h.called == CalledMigrateApply || h.called == CalledMigrateDelete {
 				headline, err := readFileHeadline("./migrations/default/" + file.Name() + "/up.sql")
 				if err != nil {
 					return err

@@ -26,7 +26,7 @@ hasuraf migrate apply
 # Use with admin secret:
 hasuraf migrate apply --admin-secret "<admin-secret>"`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if result, err := hasura.NewHasuraCmd("migrate apply", setFlagValues(cmd)).Run(); err != nil {
+		if result, err := hasura.NewHasuraCmd(hasura.CalledMigrateApply, setFlagValues(cmd)).Run(); err != nil {
 			fmt.Println(result, err)
 			os.Exit(1)
 		} else {
