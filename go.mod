@@ -1,6 +1,6 @@
 module github.com/sho-hata/hasuraf
 
-go 1.18
+go 1.19
 
 require (
 	github.com/ktr0731/go-fuzzyfinder v0.5.1
